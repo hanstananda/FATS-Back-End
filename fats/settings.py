@@ -9,12 +9,12 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
+from enum import Enum
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -25,8 +25,7 @@ SECRET_KEY = 'ez-#yu!ijl^e8yx^9)j5*6=ua%_mrjp^plv%opw!css=-8+$3a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -37,6 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'attendance_server.apps.AttendanceServerConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +71,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fats.wsgi.application'
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+class DeployPhaseEnum(Enum):
+    LOCAL = 1
+    STAGING = 2
+    PROD = 3
+    TEST = 5
+
+
+# Deploy phase
+deploy_phase = os.getenv('DEPLOY_PHASE', 'LOCAL')
+
+if deploy_phase == 'PROD':
+    deploy_phase = DeployPhaseEnum.PROD
+elif deploy_phase == 'STAGING':
+    deploy_phase = DeployPhaseEnum.STAGING
+elif deploy_phase == 'TEST':
+    deploy_phase = DeployPhaseEnum.TEST
+else:
+    deploy_phase = DeployPhaseEnum.LOCAL
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -79,7 +102,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -99,13 +121,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Singapore'
 
 USE_I18N = True
 
@@ -113,8 +134,20 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Login redirect url
+
+LOGIN_REDIRECT_URL = '/'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
+
+# REST Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

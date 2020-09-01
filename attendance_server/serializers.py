@@ -46,3 +46,9 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = '__all__'
+
+
+class CourseTeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseTeacher
+        fields = '__all__'

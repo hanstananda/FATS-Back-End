@@ -31,7 +31,6 @@ class CourseClass(models.Model):
 class CourseSchedule(models.Model):
     course_class = models.ForeignKey(CourseClass, on_delete=models.CASCADE)
     time = models.DateTimeField()
-    teachers = models.ManyToManyField(User)
 
     def __str__(self):
         return str(self.course_class) + " at %s" % self.time.isoformat()
@@ -40,3 +39,26 @@ class CourseSchedule(models.Model):
 class Attendance(models.Model):
     course_schedule = models.ForeignKey(CourseSchedule, on_delete=models.CASCADE)
     attendee = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class StudentProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_id = models.CharField(max_length=20)
+    birth_date = models.DateField(null=True, blank=True)
+    face_recognition = models.CharField(max_length=20, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.user)
+
+
+class TeacherProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.user)
+
+
+class CourseTeacher(models.Model):
+    course_class = models.ForeignKey(CourseClass, on_delete=models.CASCADE)
+    teachers = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE)
+

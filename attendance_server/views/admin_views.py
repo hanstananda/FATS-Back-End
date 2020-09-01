@@ -50,3 +50,13 @@ class AttendanceViewSetAdmin(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
     permission_classes = [permissions.IsAdminUser]
+
+
+class CourseTeacherViewSetAdmin(viewsets.ModelViewSet):
+    """
+    API endpoint that allows courses to be viewed or edited.
+    """
+    queryset = CourseTeacher.objects.all()
+    serializer_class = CourseTeacherSerializer
+    permission_classes = [permissions.IsAdminUser]
+

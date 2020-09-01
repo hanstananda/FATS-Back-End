@@ -18,6 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin-api/', include('attendance_server.urls.admin_urls')),
+    path('teacher/', include('attendance_server.urls.teacher_urls')),
     path('admin/', admin.site.urls),
     # For internal rest-framework auth to work
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

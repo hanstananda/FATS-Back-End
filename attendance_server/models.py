@@ -11,8 +11,9 @@ class Course(models.Model):
 
 
 class CourseSchedule(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    name = models.ForeignKey(Course, on_delete=models.CASCADE)
     time = models.DateTimeField()
+    teachers = models.ManyToManyField(User)
 
 
 class Attendance(models.Model):

@@ -25,6 +25,15 @@ class CourseViewSetAdmin(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser]
 
 
+class CourseClassViewSetAdmin(viewsets.ModelViewSet):
+    """
+    API endpoint that allows courses to be viewed or edited.
+    """
+    queryset = CourseClass.objects.all()
+    serializer_class = CourseClassSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
 class CourseScheduleViewSetAdmin(viewsets.ModelViewSet):
     """
     API endpoint that allows courses to be viewed or edited.

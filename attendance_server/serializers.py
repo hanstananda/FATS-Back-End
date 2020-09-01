@@ -27,7 +27,13 @@ class UserSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['name', 'index', 'type']
+        fields = '__all__'
+
+
+class CourseClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseClass
+        fields = '__all__'
 
 
 class CourseScheduleSerializer(serializers.ModelSerializer):

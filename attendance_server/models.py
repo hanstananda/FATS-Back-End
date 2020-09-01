@@ -30,10 +30,11 @@ class CourseClass(models.Model):
 
 class CourseSchedule(models.Model):
     course_class = models.ForeignKey(CourseClass, on_delete=models.CASCADE)
-    time = models.DateTimeField()
+    open_time = models.DateTimeField()
+    is_open = models.BooleanField(default=True)
 
     def __str__(self):
-        return str(self.course_class) + " at %s" % self.time.isoformat()
+        return str(self.course_class) + " at %s" % self.open_time.isoformat()
 
 
 class Attendance(models.Model):

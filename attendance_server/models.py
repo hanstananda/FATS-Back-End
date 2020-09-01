@@ -62,3 +62,5 @@ class CourseTeacher(models.Model):
     course_class = models.ForeignKey(CourseClass, on_delete=models.CASCADE)
     teachers = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.course_class) + " taught by " + str(self.teachers)

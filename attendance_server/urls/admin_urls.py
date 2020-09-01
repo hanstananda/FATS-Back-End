@@ -45,7 +45,7 @@ urlpatterns = [
     path('course-teacher/', course_teacher_list, name='admin-course-teacher-list'),
     path('course-teacher/<int:pk>/', course_teacher_detail, name='admin-course-teacher-detail'),
     path('course-schedule/', course_schedule_list, name='admin-course-schedule-list'),
-    path('course-schedule/<int:pk>/', course_schedule_list, name='admin-course-schedule-list'),
+    path('course-schedule/<int:pk>/', course_schedule_list, name='admin-course-schedule-detail'),
     path('attendance/', attendance_list, name='admin-attendance-list'),
     path('attendance/<int:pk>/', attendance_detail, name='admin-attendance-detail'),
     # path('snippets/<int:pk>/', views.SnippetDetail.as_view()),

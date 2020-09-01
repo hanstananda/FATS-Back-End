@@ -6,8 +6,8 @@ from django.db import models
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
-    index = models.CharField(max_length=200)
-    type = models.CharField(max_length=200)
+    index = models.CharField(max_length=200, blank=True, null=True)
+    type = models.CharField(max_length=200, blank=True, null=True)
 
 
 class CourseSchedule(models.Model):

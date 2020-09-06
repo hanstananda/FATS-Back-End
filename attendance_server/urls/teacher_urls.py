@@ -38,7 +38,9 @@ attendance_list = AttendanceViewSet.as_view(LIST_AND_CREATE)
 attendance_detail = AttendanceViewSet.as_view(DETAILS_UPDATE_DELETE)
 
 urlpatterns = [
+    path('course/', course_list, name='teacher-course-list'),
     path('course/<int:pk>/', course_detail, name='teacher-course-detail'),
+    path('course_class/', course_class_list, name='course-class-list'),
     path('course_class/<int:pk>/', course_class_detail, name='course-class-detail'),
     path('course-teacher/', course_teacher_list, name='teacher-course-teacher-list'),
     path('course-teacher/<int:pk>/', course_teacher_detail, name='teacher-course-teacher-detail'),

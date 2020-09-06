@@ -65,3 +65,11 @@ class CourseTeacher(models.Model):
 
     def __str__(self):
         return str(self.course_class) + " taught by " + str(self.teachers)
+
+
+class CourseStudent(models.Model):
+    course_class = models.ForeignKey(CourseClass, on_delete=models.CASCADE)
+    students = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.course_class) + " taken by " + str(self.students)

@@ -13,13 +13,22 @@ DETAILS_UPDATE_DELETE = {
     'delete': 'destroy'
 }
 
-
-course_teacher_list = CourseTeacherViewSet.as_view({
+LIST = {
     'get': 'list'
-})
-course_teacher_detail = CourseTeacherViewSet.as_view({
+}
+
+RETRIEVE = {
     'get': 'retrieve'
-})
+}
+
+course_list = CourseReadViewSet.as_view(LIST)
+course_detail = CourseReadViewSet.as_view(RETRIEVE)
+
+course_class_list = CourseClassReadViewSet.as_view(LIST)
+course_class_detail = CourseClassReadViewSet.as_view(RETRIEVE)
+
+course_teacher_list = CourseTeacherViewSet.as_view(LIST)
+course_teacher_detail = CourseTeacherViewSet.as_view(RETRIEVE)
 
 course_schedule_list = CourseScheduleViewSet.as_view(LIST_AND_CREATE)
 course_schedule_detail = CourseScheduleViewSet.as_view(DETAILS_UPDATE_DELETE)
@@ -27,8 +36,9 @@ course_schedule_detail = CourseScheduleViewSet.as_view(DETAILS_UPDATE_DELETE)
 attendance_list = AttendanceViewSet.as_view(LIST_AND_CREATE)
 attendance_detail = AttendanceViewSet.as_view(DETAILS_UPDATE_DELETE)
 
-
 urlpatterns = [
+    path('course/<int:pk>/', course_detail, name='teacher-course-detail'),
+    path('course_class/<int:pk>/', course_class_detail, name='course-class-detail'),
     path('course-teacher/', course_teacher_list, name='teacher-course-teacher-list'),
     path('course-teacher/<int:pk>/', course_teacher_detail, name='teacher-course-teacher-detail'),
     path('course-schedule/', course_schedule_list, name='teacher-course-schedule-list'),

@@ -7,13 +7,33 @@ from attendance_server.models import *
 from attendance_server.serializers import *
 
 
+class CourseClassReadViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+        API endpoint that allows course classes to be viewed.
+    """
+    # TODO: Add permission check to only able to list/retrieve courses taught by teacher invoking the request
+    queryset = CourseClass.objects.all()
+    serializer_class = CourseClassSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
+
+
+class CourseReadViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+        API endpoint that allows course to be viewed.
+    """
+    # TODO: Add permission check to only able to list/retrieve courses taught by teacher invoking the request
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
+
+
 class CourseTeacherViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    API endpoint that allows courses to be viewed or edited.
+    API endpoint that allows courses taught by specific teacher to be viewed.
     """
     queryset = CourseTeacher.objects.all()
     serializer_class = CourseTeacherSerializer
-    permission_classes = [custom_permissions.TeacherOwnerOnly, custom_permissions.TeacherOnly]
+    permission_classes = [custom_permissions.CourseTeacherOwnerOnly, custom_permissions.TeacherOnly]
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -33,7 +53,7 @@ class CourseTeacherViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CourseScheduleViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows courses to be viewed or edited.
+    API endpoint that allows course schedules to be viewed or edited.
     """
     queryset = CourseSchedule.objects.all()
     serializer_class = CourseScheduleSerializer
@@ -42,7 +62,7 @@ class CourseScheduleViewSet(viewsets.ModelViewSet):
 
 class AttendanceViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows courses to be viewed or edited.
+    API endpoint that allows attendance to be viewed or edited.
     """
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer

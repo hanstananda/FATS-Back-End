@@ -32,7 +32,7 @@ class CourseTeacherViewSet(viewsets.ReadOnlyModelViewSet):
     API endpoint that allows courses taught by specific teacher to be viewed.
     """
     queryset = CourseTeacher.objects.all()
-    serializer_class = CourseTeacherSerializer
+    serializer_class = CourseTeacherDetailedSerializer
     permission_classes = [custom_permissions.CourseTeacherOwnerOnly, custom_permissions.TeacherOnly]
 
     def list(self, request, *args, **kwargs):

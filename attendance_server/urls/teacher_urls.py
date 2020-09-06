@@ -1,5 +1,6 @@
 from django.urls import path
 
+from attendance_server.views.authentication import CustomAuthToken
 from attendance_server.views.teacher_views import *
 
 LIST_AND_CREATE = {
@@ -45,4 +46,5 @@ urlpatterns = [
     path('course-schedule/<int:pk>/', course_schedule_list, name='teacher-course-schedule-detail'),
     path('attendance/', attendance_list, name='teacher-attendance-list'),
     path('attendance/<int:pk>/', attendance_detail, name='teacher-attendance-detail'),
+    path('login/', CustomAuthToken.as_view(), name='login')
 ]

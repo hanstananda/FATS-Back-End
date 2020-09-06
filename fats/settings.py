@@ -14,6 +14,8 @@ from enum import Enum
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from rest_framework.authentication import TokenAuthentication
+
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -157,3 +159,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+TokenAuthentication.keyword = "Bearer"

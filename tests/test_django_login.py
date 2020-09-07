@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework import status
 
+
 class TeacherLoginTestCase(TestCase):
     USERNAME = "teacher"
     PASSWORD = "teacher"
@@ -21,5 +22,6 @@ class TeacherLoginTestCase(TestCase):
 
     def test_view(self):
         client = APIClient()
-        response = client.post(reverse('teacher-login'), {'username': self.USERNAME, 'password': self.PASSWORD}, format='json')
+        response = client.post(reverse('teacher-login'), {'username': self.USERNAME, 'password': self.PASSWORD},
+                               format='json')
         assert (response.status_code == status.HTTP_200_OK)

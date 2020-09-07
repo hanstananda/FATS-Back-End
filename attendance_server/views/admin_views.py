@@ -27,7 +27,7 @@ class CourseViewSetAdmin(viewsets.ModelViewSet):
 
 class CourseClassViewSetAdmin(viewsets.ModelViewSet):
     """
-    API endpoint that allows courses to be viewed or edited.
+    API endpoint that allows course class to be viewed or edited.
     """
     queryset = CourseClass.objects.all()
     serializer_class = CourseClassSerializer
@@ -36,7 +36,7 @@ class CourseClassViewSetAdmin(viewsets.ModelViewSet):
 
 class CourseScheduleViewSetAdmin(viewsets.ModelViewSet):
     """
-    API endpoint that allows courses to be viewed or edited.
+    API endpoint that allows course schedule to be viewed or edited.
     """
     queryset = CourseSchedule.objects.all()
     serializer_class = CourseScheduleSerializer
@@ -45,7 +45,7 @@ class CourseScheduleViewSetAdmin(viewsets.ModelViewSet):
 
 class AttendanceViewSetAdmin(viewsets.ModelViewSet):
     """
-    API endpoint that allows courses to be viewed or edited.
+    API endpoint that allows course attendance to be viewed or edited.
     """
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
@@ -54,9 +54,17 @@ class AttendanceViewSetAdmin(viewsets.ModelViewSet):
 
 class CourseTeacherViewSetAdmin(viewsets.ModelViewSet):
     """
-    API endpoint that allows courses to be viewed or edited.
+    API endpoint that allows teachers teaching the course to be viewed or edited.
     """
     queryset = CourseTeacher.objects.all()
     serializer_class = CourseTeacherSerializer
     permission_classes = [permissions.IsAdminUser]
 
+
+class CourseStudentViewSetAdmin(viewsets.ModelViewSet):
+    """
+    API endpoint that allows students taking the course to be viewed or edited.
+    """
+    queryset = CourseStudent.objects.all()
+    serializer_class = CourseStudentSerializer
+    permission_classes = [permissions.IsAdminUser]

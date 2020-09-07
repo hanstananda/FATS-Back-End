@@ -29,6 +29,9 @@ course_class_detail = CourseClassViewSetAdmin.as_view(DETAILS_UPDATE_DELETE)
 course_teacher_list = CourseTeacherViewSetAdmin.as_view(LIST_AND_CREATE)
 course_teacher_detail = CourseTeacherViewSetAdmin.as_view(DETAILS_UPDATE_DELETE)
 
+course_student_list = CourseStudentViewSetAdmin.as_view(LIST_AND_CREATE)
+course_student_detail = CourseScheduleViewSetAdmin.as_view(DETAILS_UPDATE_DELETE)
+
 course_schedule_list = CourseScheduleViewSetAdmin.as_view(LIST_AND_CREATE)
 course_schedule_detail = CourseScheduleViewSetAdmin.as_view(DETAILS_UPDATE_DELETE)
 
@@ -44,6 +47,8 @@ urlpatterns = [
     path('course-class/<int:pk>/', course_class_detail, name='admin-course-class-detail'),
     path('course-teacher/', course_teacher_list, name='admin-course-teacher-list'),
     path('course-teacher/<int:pk>/', course_teacher_detail, name='admin-course-teacher-detail'),
+    path('course-student/', course_student_list, name='admin-course-student-list'),
+    path('course-student/<int:pk>/', course_student_detail, name='admin-course-student-detail'),
     path('course-schedule/', course_schedule_list, name='admin-course-schedule-list'),
     path('course-schedule/<int:pk>/', course_schedule_list, name='admin-course-schedule-detail'),
     path('attendance/', attendance_list, name='admin-attendance-list'),

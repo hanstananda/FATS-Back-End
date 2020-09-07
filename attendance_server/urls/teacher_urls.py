@@ -48,5 +48,5 @@ urlpatterns = [
     path('course-schedule/<int:pk>/', course_schedule_list, name='teacher-course-schedule-detail'),
     path('attendance/', attendance_list, name='teacher-attendance-list'),
     path('attendance/<int:pk>/', attendance_detail, name='teacher-attendance-detail'),
-    path('login/', CustomAuthToken.as_view(), name='login')
+    path('login/', CustomAuthToken.as_view(), name='teacher-login')
 ]

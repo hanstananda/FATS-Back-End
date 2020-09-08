@@ -1,6 +1,7 @@
 # Create your views here.
-from rest_framework import viewsets, generics, permissions
+from rest_framework import viewsets, generics, permissions, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from attendance_server import permissions as custom_permissions
 from attendance_server.models import *
@@ -67,3 +68,33 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
     permission_classes = [custom_permissions.TeacherOnly]
+
+
+class StudentProfileViewByStudentId(generics.ListAPIView):
+    serializer_class = StudentProfileSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases for
+        the user as determined by the username portion of the URL.
+        """
+        student_id = self.request.query_params.get('student_id', '')
+        return StudentProfile.objects.filter(student_id=student_id)
+
+
+class OverrideAttendanceView(generics.CreateAPIView):
+    serializer_class = AttendanceSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
+
+    def create(self, request, *args, **kwargs):
+        student_id = self.request.data['student_id']
+        student = StudentProfile.objects.get(student_id=student_id).user.id
+        data = dict(request.data)
+        data['attendee'] = student
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

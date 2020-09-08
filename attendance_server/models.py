@@ -41,10 +41,13 @@ class Attendance(models.Model):
     course_schedule = models.ForeignKey(CourseSchedule, on_delete=models.CASCADE)
     attendee = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.course_schedule) + " attended by " + str(self.attendee)
+
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    student_id = models.CharField(max_length=20)
+    student_id = models.CharField(max_length=20, unique=True)
     birth_date = models.DateField(null=True, blank=True)
     face_recognition = models.CharField(max_length=20, null=True, blank=True)
 

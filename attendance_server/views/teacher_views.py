@@ -76,11 +76,57 @@ class StudentProfileViewByStudentId(generics.ListAPIView):
 
     def get_queryset(self):
         """
-        This view should return a list of all the purchases for
-        the user as determined by the username portion of the URL.
+        This view should return student profile given the student id
         """
         student_id = self.request.query_params.get('student_id', '')
         return StudentProfile.objects.filter(student_id=student_id)
+
+
+class AbsentStudentView(generics.ListAPIView):
+    serializer_class = StudentProfileSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the absent students on a given course schedule
+        """
+        course_schedule_id = self.request.query_params.get('course_schedule_id', '')
+        course_class_id = CourseSchedule.objects.get(id=course_schedule_id).course_class_id
+        # print(course_schedule_id, course_class_id)
+        course_students_user_id = set(i.students.user.id for i in
+                                      CourseStudent.objects.filter(course_class_id=course_class_id))
+        attended_students_user_id = set(i.attendee.id for i in
+                                        Attendance.objects.filter(course_schedule_id=course_schedule_id))
+        # print(course_students_user_id, attended_students_user_id)
+        return StudentProfile.objects.filter(user_id__in=course_students_user_id - attended_students_user_id)
+
+
+class LateStudentView(generics.ListAPIView):
+    serializer_class = StudentProfileSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the absent students on a given course schedule
+        """
+        course_schedule_id = self.request.query_params.get('course_schedule_id', '')
+        attended_students_user_id = set(i.attendee.id for i in
+                                        Attendance.objects.filter(course_schedule_id=course_schedule_id, late=True))
+        return StudentProfile.objects.filter(user_id__in=attended_students_user_id)
+
+
+class PresentStudentView(generics.ListAPIView):
+    serializer_class = StudentProfileSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the absent students on a given course schedule
+        """
+        course_schedule_id = self.request.query_params.get('course_schedule_id', '')
+        attended_students_user_id = set(i.attendee.id for i in
+                                        Attendance.objects.filter(course_schedule_id=course_schedule_id, late=False))
+        return StudentProfile.objects.filter(user_id__in=attended_students_user_id)
 
 
 class OverrideAttendanceView(generics.CreateAPIView):

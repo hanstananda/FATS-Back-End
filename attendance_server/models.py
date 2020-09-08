@@ -40,6 +40,7 @@ class CourseSchedule(models.Model):
 class Attendance(models.Model):
     course_schedule = models.ForeignKey(CourseSchedule, on_delete=models.CASCADE)
     attendee = models.ForeignKey(User, on_delete=models.CASCADE)
+    late = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.course_schedule) + " attended by " + str(self.attendee)

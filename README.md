@@ -3,7 +3,7 @@
 Web-server for Facial-recognition-based Attendance Taking System (FATS)
 
 ## Requirements
-*   Python 3.7
+*   Python 3.6+ (Tested with Python 3.6, 3.7, and 3.8 on the pipeline)
 *   MySQL
 
 ## Notes 

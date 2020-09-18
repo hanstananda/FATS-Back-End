@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -30,7 +32,7 @@ class CourseClass(models.Model):
 
 class CourseSchedule(models.Model):
     course_class = models.ForeignKey(CourseClass, on_delete=models.CASCADE)
-    open_time = models.DateTimeField()
+    open_time = models.DateTimeField(default=datetime.now())
     is_open = models.BooleanField(default=True)
 
     def __str__(self):

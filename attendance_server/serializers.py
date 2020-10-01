@@ -59,7 +59,7 @@ class AttendanceTeacherSerializer(serializers.ModelSerializer):
         if 'late' not in validated_data:
             course_schedule = CourseSchedule.objects.get(id=validated_data['course_schedule'].id)
             duration = timezone.now() - course_schedule.open_time
-            if duration.total_seconds() > LATE_ATTENDANCE_CUTOFF_MINUTES*60:
+            if duration.total_seconds() > LATE_ATTENDANCE_CUTOFF_MINUTES * 60:
                 late = True
             else:
                 late = False
@@ -70,6 +70,14 @@ class AttendanceTeacherSerializer(serializers.ModelSerializer):
 
 
 class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProfile
+        fields = '__all__'
+
+
+class StudentProfileDetailedSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = StudentProfile
         fields = '__all__'
@@ -97,11 +105,12 @@ class CourseClassDetailedSerializer(serializers.ModelSerializer):
 
 class CourseTeacherDetailedSerializer(serializers.ModelSerializer):
     course_class = CourseClassDetailedSerializer()
+
     # course_info = CourseSerializer()
 
     class Meta:
         model = CourseTeacher
-        fields = ('course_class', )
+        fields = ('course_class',)
 
 
 class TakeAttendanceSerializer(serializers.Serializer):

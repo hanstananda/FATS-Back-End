@@ -71,7 +71,7 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     API endpoint that allows attendance to be viewed or edited.
     """
     queryset = Attendance.objects.all()
-    serializer_class = AttendanceSerializer
+    serializer_class = AttendanceTeacherSerializer
     permission_classes = [custom_permissions.TeacherOnly]
 
 

@@ -57,8 +57,8 @@ class AttendanceTeacherSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         if 'late' not in validated_data:
-            course_schedule = CourseSchedule.objects.get(id=validated_data['course_schedule'])
-            duration = datetime.now() - course_schedule.open_time
+            course_schedule = CourseSchedule.objects.get(id=validated_data['course_schedule'].id)
+            duration = timezone.now() - course_schedule.open_time
             if duration.total_seconds() > LATE_ATTENDANCE_CUTOFF_MINUTES*60:
                 late = True
             else:

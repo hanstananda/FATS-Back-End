@@ -157,7 +157,7 @@ class StudentProfileReadViewSet(viewsets.ReadOnlyModelViewSet):
     """
     # TODO: Add permission check to only able to list/retrieve student taught by teacher invoking the request
     queryset = StudentProfile.objects.all()
-    serializer_class = StudentProfileSerializer
+    serializer_class = StudentProfileDetailedSerializer
     permission_classes = [custom_permissions.TeacherOnly]
 
 

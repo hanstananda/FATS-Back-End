@@ -151,6 +151,16 @@ class OverrideAttendanceView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+class StudentProfileReadViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+        API endpoint that allows course classes to be viewed.
+    """
+    # TODO: Add permission check to only able to list/retrieve student taught by teacher invoking the request
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentProfileSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
+
+
 @csrf_exempt
 def take_attendance_by_photo(request):
     """

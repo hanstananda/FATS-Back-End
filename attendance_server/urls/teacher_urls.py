@@ -37,6 +37,9 @@ course_schedule_detail = CourseScheduleViewSet.as_view(DETAILS_UPDATE_DELETE)
 attendance_list = AttendanceViewSet.as_view(LIST_AND_CREATE)
 attendance_detail = AttendanceViewSet.as_view(DETAILS_UPDATE_DELETE)
 
+student_list = StudentProfileReadViewSet.as_view(LIST)
+student_detail = StudentProfileReadViewSet.as_view(RETRIEVE)
+
 urlpatterns = [
     # path('course/', course_list, name='teacher-course-list'),
     # path('course/<int:pk>/', course_detail, name='teacher-course-detail'),
@@ -55,4 +58,6 @@ urlpatterns = [
     path('student/', StudentProfileViewByStudentId.as_view(), name='get-student-by-student_id'),
     path('override-attendance/', OverrideAttendanceView.as_view(), name='override-attendance'),
     path('take-attendance/', take_attendance_by_photo, name='take-attendance'),
+    path('student-profile/', student_list, name='teacher-student-profile-list'),
+    path('student-profile/<int:pk>/', student_detail, name='teacher-student-profile-detail'),
 ]

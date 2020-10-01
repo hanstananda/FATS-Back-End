@@ -81,3 +81,8 @@ class CourseTeacherDetailedSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseTeacher
         fields = ('course_class', )
+
+
+class TakeAttendanceSerializer(serializers.Serializer):
+    raw_picture = serializers.CharField(max_length=10000000)
+    session_id = serializers.IntegerField()

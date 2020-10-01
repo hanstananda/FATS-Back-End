@@ -1,4 +1,9 @@
 # Create your views here.
+import base64
+import json
+
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -144,3 +149,36 @@ class OverrideAttendanceView(generics.CreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+@csrf_exempt
+def take_attendance_by_photo(request):
+    """
+    Working example for encoding and format:
+
+    import base64
+    import requests
+    import json
+    with open("photo.jpg", "rb") as f:
+        s_raw = f.read()
+    s_b64 = base64.b64encode(s_raw)
+    requests.post(
+        url='http://localhost:8000/teacher-api/take-attendance/',
+        data=json.dumps({'session_id': 123, 'raw_picture': str(s_b64, 'ascii')})
+    )
+    """
+    serializer = TakeAttendanceSerializer(json.loads(request.body))
+    photo = base64.b64decode(serializer.data['raw_picture'])
+    session_id = serializer.data['session_id']
+
+    # Store the submitted in temporary folder
+
+    # Initialize folder of this class if not exists
+
+    # Use deepface to detect face, return if face not detected
+
+    # Use deepface to check photo against folder return if no face match
+
+    # Take attendance of user in the database, return matched student id
+
+    return HttpResponse(200)

@@ -54,4 +54,5 @@ urlpatterns = [
     path('login/', CustomAuthToken.as_view(), name='teacher-login'),
     path('student/', StudentProfileViewByStudentId.as_view(), name='get-student-by-student_id'),
     path('override-attendance/', OverrideAttendanceView.as_view(), name='override-attendance'),
+    path('take-attendance/', take_attendance_by_photo, name='take-attendance'),
 ]

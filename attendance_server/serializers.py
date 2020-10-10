@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+import datetime
 from rest_framework.validators import UniqueValidator
 
+from attendance_server.constants import LATE_ATTENDANCE_CUTOFF_MINUTES
 from attendance_server.models import *
 
 
@@ -48,7 +50,34 @@ class AttendanceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AttendanceTeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = '__all__'
+
+    def create(self, validated_data):
+        if 'late' not in validated_data:
+            course_schedule = CourseSchedule.objects.get(id=validated_data['course_schedule'].id)
+            duration = timezone.now() - course_schedule.open_time
+            if duration.total_seconds() > LATE_ATTENDANCE_CUTOFF_MINUTES * 60:
+                late = True
+            else:
+                late = False
+            validated_data['late'] = late
+        attendance = Attendance.objects.create(**validated_data)
+        attendance.save()
+        return attendance
+
+
 class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProfile
+        fields = '__all__'
+
+
+class StudentProfileDetailedSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = StudentProfile
         fields = '__all__'
@@ -76,6 +105,7 @@ class CourseClassDetailedSerializer(serializers.ModelSerializer):
 
 class CourseTeacherDetailedSerializer(serializers.ModelSerializer):
     course_class = CourseClassDetailedSerializer()
+
     # course_info = CourseSerializer()
 
     class Meta:

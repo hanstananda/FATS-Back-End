@@ -6,8 +6,8 @@ import os
 import shutil
 from datetime import timedelta, timezone
 
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.response import Response
@@ -79,7 +79,7 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     API endpoint that allows attendance to be viewed or edited.
     """
     queryset = Attendance.objects.all()
-    serializer_class = AttendanceSerializer
+    serializer_class = AttendanceTeacherSerializer
     permission_classes = [custom_permissions.TeacherOnly]
 
 
@@ -157,6 +157,16 @@ class OverrideAttendanceView(generics.CreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class StudentProfileReadViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+        API endpoint that allows course classes to be viewed.
+    """
+    # TODO: Add permission check to only able to list/retrieve student taught by teacher invoking the request
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentProfileDetailedSerializer
+    permission_classes = [custom_permissions.TeacherOnly]
 
 
 @csrf_exempt
@@ -254,3 +264,4 @@ def take_attendance_by_photo(request):
         'face_is_detected': True,
         'matched_student_id': student_id
     }), status=200)
+

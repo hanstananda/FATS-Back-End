@@ -1,8 +1,13 @@
 # Create your views here.
 import base64
+import imghdr
 import json
+import os
+import shutil
+from datetime import timedelta, timezone
 
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.response import Response
@@ -11,6 +16,9 @@ from rest_framework.views import APIView
 from attendance_server import permissions as custom_permissions
 from attendance_server.models import *
 from attendance_server.serializers import *
+from fats import file_utils
+from fats.file_utils import STORAGE_DIR
+from fats.settings import MEDIA_ROOT
 
 
 class CourseClassReadViewSet(viewsets.ReadOnlyModelViewSet):
@@ -162,23 +170,87 @@ def take_attendance_by_photo(request):
     with open("photo.jpg", "rb") as f:
         s_raw = f.read()
     s_b64 = base64.b64encode(s_raw)
-    requests.post(
+    r = requests.post(
         url='http://localhost:8000/teacher-api/take-attendance/',
-        data=json.dumps({'session_id': 123, 'raw_picture': str(s_b64, 'ascii')})
+        data=json.dumps({'session_id': 1, 'raw_picture': str(s_b64, 'ascii')})
     )
     """
     serializer = TakeAttendanceSerializer(json.loads(request.body))
     photo = base64.b64decode(serializer.data['raw_picture'])
     session_id = serializer.data['session_id']
 
-    # Store the submitted in temporary folder
+    """
+    Store the submitted in temporary folder
+    """
+    file_name = file_utils.store_temp_file(photo, '.jpg')
+    if imghdr.what(file_name) is None:
+        return HttpResponse(json.dumps({
+            'error_msg': 'raw_picture is not a valid image data.'
+        }), status=400)
 
-    # Initialize folder of this class if not exists
+    """
+    Initialize folder of this class if not exists
+    """
+    course_schedule = get_object_or_404(CourseSchedule, id=session_id)
+    is_created_now = file_utils.create_directory(session_id)
+    if is_created_now:
+        # copy out student images and pre-process it
+        print("COPY STUDENT PHOTO")
+        students = [coursestudent.students for coursestudent in
+                    CourseStudent.objects.filter(course_class=course_schedule.course_class)]
+        print(students)
+        for student in students:
+            src = os.path.join(MEDIA_ROOT, student.image.path)
+            dst = os.path.join(STORAGE_DIR, str(session_id), student.student_id+'.jpg')
+            print(src, dst)
+            shutil.copyfile(src, dst)
 
-    # Use deepface to detect face, return if face not detected
+    """
+    Use deepface to detect face, return if face not detected
+    """
+    from deepface import DeepFace
+    try:
+        DeepFace.detectFace(file_name, detector_backend='dlib')
+    except ValueError:
+        return HttpResponse(json.dumps({
+            'face_is_detected': False
+        }), status=200)
 
-    # Use deepface to check photo against folder return if no face match
+    """
+    Use deepface to check photo against folder return if no face match
+    """
+    try:
+        df = DeepFace.find(
+            file_name,
+            db_path=os.path.join(file_utils.STORAGE_DIR, str(session_id)),
+            distance_metric='euclidean_l2',
+            detector_backend='dlib'
+        )
+    except ValueError:
+        return HttpResponse(json.dumps({
+            'error_msg': 'Server failed to detect face existing database images'
+        }), status=500)
+    if len(df) == 0:
+        return HttpResponse(json.dumps({
+            'face_is_detected': True,
+            'matched_student_id': None,
+        }), status=200)
+    result = [(row['distance'], row['identity']) for idx, row in df.iterrows()]
+    result.sort()
+    best_match_file_name = result[0][1]
+    student_id, __ = os.path.basename(best_match_file_name).split('.')
 
-    # Take attendance of user in the database, return matched student id
-
-    return HttpResponse(200)
+    """
+    Take attendance of user in the database, return matched student id
+    """
+    student_obj = StudentProfile.objects.get(student_id=student_id)
+    if Attendance.objects.filter(attendee=student_obj.user, course_schedule=course_schedule).count() == 0:
+        Attendance.objects.create(
+            attendee=student_obj.user,
+            course_schedule=course_schedule,
+            late=datetime.now() > (course_schedule.open_time.replace(tzinfo=None) + timedelta(minutes=15))
+        )
+    return HttpResponse(json.dumps({
+        'face_is_detected': True,
+        'matched_student_id': student_id
+    }), status=200)

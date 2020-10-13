@@ -17,6 +17,7 @@ from pathlib import Path
 from rest_framework.authentication import TokenAuthentication
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -161,3 +162,6 @@ REST_FRAMEWORK = {
 }
 
 TokenAuthentication.keyword = "Bearer"
+
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440 * 10  # 10 MB

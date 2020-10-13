@@ -110,7 +110,7 @@ class CourseTeacherDetailedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CourseTeacher
-        fields = ('course_class',)
+        fields = ('course_class', )
 
 
 class TakeAttendanceSerializer(serializers.Serializer):

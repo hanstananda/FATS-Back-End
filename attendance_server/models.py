@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 
 from django.contrib.auth.models import User
@@ -49,11 +50,17 @@ class Attendance(models.Model):
         return str(self.course_schedule) + " attended by " + str(self.attendee)
 
 
+def image_path(instance, filename):
+    return 'student_images/{0}/{1}.jpg'.format(
+            uuid.uuid4(),
+            instance.student_id,
+        )
+
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     student_id = models.CharField(max_length=20, unique=True)
     birth_date = models.DateField(null=True, blank=True)
-    face_recognition = models.CharField(max_length=20, null=True, blank=True)
+    image = models.ImageField(default='default.jpg', upload_to=image_path)
 
     def __str__(self):
         return str(self.user)

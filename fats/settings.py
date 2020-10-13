@@ -162,3 +162,6 @@ REST_FRAMEWORK = {
 }
 
 TokenAuthentication.keyword = "Bearer"
+
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440 * 10  # 10 MB

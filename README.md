@@ -30,24 +30,24 @@ mysql -V
 
 ### Running the server for the first time
 1   Download and open the project directory:  
-    ```bash
-    cd FATS-Back-End
-    ```
+```bash
+cd FATS-Back-End
+```
     
 2   Make migrations:  
-    ```bash
-    python manage.py makemigrations
-    ```
+```bash
+python manage.py makemigrations
+```
 
 3   Migrate to the database server  
-    ```bash
-    python manage.py migrate
-    ```
+```bash
+python manage.py migrate
+```
 
 4   Run the server  
-    ```bash
-    python manage.py runserver
-    ```
+```bash
+python manage.py runserver
+```
 
 ### Re-running the server 
 If the database has been set up, then the system can be started directly using: 

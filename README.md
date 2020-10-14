@@ -25,7 +25,7 @@ python3 --version
 mysql -V
 ```
 
-## Notes 
+#### Notes 
 *   You may want to use `venv` for managing the python environments.
 
 ### Running the server for the first time

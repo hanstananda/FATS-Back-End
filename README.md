@@ -29,22 +29,22 @@ mysql -V
 *   You may want to use `venv` for managing the python environments.
 
 ### Running the server for the first time
-1   Download and open the project directory: 
+1   Download and open the project directory:  
     ```bash
     cd FATS-Back-End
     ```
     
-2   Make migrations: 
+2   Make migrations:  
     ```bash
     python manage.py makemigrations
     ```
 
-3   Migrate to the database server
+3   Migrate to the database server  
     ```bash
     python manage.py migrate
     ```
 
-4   Run the server
+4   Run the server  
     ```bash
     python manage.py runserver
     ```

@@ -261,8 +261,12 @@ def take_attendance_by_photo(request):
             course_schedule=course_schedule,
             late=timezone.now() > (course_schedule.open_time + timedelta(minutes=15))
         )
+        attendance_taken_before = False
+    else:
+        attendance_taken_before = True
     return HttpResponse(json.dumps({
         'face_is_detected': True,
-        'matched_student_id': student_id
+        'matched_student_id': student_id,
+        'attendance_taken_before': attendance_taken_before,
     }), status=200)
 

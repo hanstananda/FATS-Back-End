@@ -259,7 +259,7 @@ def take_attendance_by_photo(request):
         Attendance.objects.create(
             attendee=student_obj.user,
             course_schedule=course_schedule,
-            late=timezone.now() > (course_schedule.open_time + timedelta(minutes=15))
+            late=timezone.now() > (course_schedule.open_time + timedelta(minutes=LATE_ATTENDANCE_CUTOFF_MINUTES))
         )
         attendance_taken_before = False
     else:

@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-import datetime
 from rest_framework.validators import UniqueValidator
 
 from attendance_server.constants import LATE_ATTENDANCE_CUTOFF_MINUTES

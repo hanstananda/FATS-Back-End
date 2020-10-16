@@ -4,10 +4,11 @@ import imghdr
 import json
 import os
 import shutil
-from datetime import timedelta, timezone
+from datetime import timedelta
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.response import Response
@@ -258,7 +259,7 @@ def take_attendance_by_photo(request):
         Attendance.objects.create(
             attendee=student_obj.user,
             course_schedule=course_schedule,
-            late=datetime.now() > (course_schedule.open_time.replace(tzinfo=None) + timedelta(minutes=15))
+            late=timezone.now() > (course_schedule.open_time + timedelta(minutes=15))
         )
     return HttpResponse(json.dumps({
         'face_is_detected': True,
